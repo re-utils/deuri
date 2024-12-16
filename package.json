@@ -1,7 +1,7 @@
 {
   "name": "fast-duc",
   "version": "0.0.1",
-  "description": "Example package",
+  "description": "Fast decode URI component",
   "keywords": [],
   "license": "MIT",
   "type": "module",
@@ -20,6 +20,7 @@
     "eslint": "latest",
     "eslint-plugin-jsdoc": "latest",
     "mitata": "latest",
+    "tsx": "^4.19.2",
     "typescript": "latest",
     "typescript-eslint": "latest"
   },

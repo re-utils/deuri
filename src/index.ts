@@ -1,1 +1,596 @@
-export { };
+const hexMap = [
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+  255,
+
+  10,
+  11,
+  12,
+  13,
+  14,
+  15
+];
+
+const data = [
+  // The first part of the table maps bytes to character to a transition.
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  4,
+  4,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  6,
+  7,
+  7,
+  7,
+  7,
+  7,
+  7,
+  7,
+  7,
+  7,
+  7,
+  7,
+  7,
+  8,
+  7,
+  7,
+  10,
+  9,
+  9,
+  9,
+  11,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+
+  // The second part of the table maps a state to a new state when adding a transition.
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  268,
+  256,
+  256,
+  256,
+  256,
+  280,
+  292,
+  304,
+  316,
+  328,
+  340,
+  352,
+  256,
+  268,
+  268,
+  268,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  280,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  280,
+  280,
+  280,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  280,
+  280,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  304,
+  304,
+  304,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  304,
+  304,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  304,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256,
+  256
+];
+
+// Maps the current transition to a mask that needs to apply to the byte.
+const mask = [0x7F, 0x3F, 0x3F, 0x3F, 0x00, 0x1F, 0x0F, 0x0F, 0x0F, 0x07, 0x07, 0x07];
+
+// eslint-disable-next-line
+const highHex = (code: number): number => code > 102 ? 255 : hexMap[code] << 4;
+// eslint-disable-next-line
+const lowHex = (code: number): number => code > 102 ? 255 : hexMap[code];
+
+/**
+ * Decode the full string
+ */
+export const decode = (url: string): string | null => {
+  let percentPosition = url.indexOf('%');
+  if (percentPosition === -1) return url;
+
+  // eslint-disable-next-line
+  let end = url.length;
+  if (percentPosition + 3 > end) return null;
+
+  // eslint-disable-next-line
+  let decoded = '',
+    last = 0,
+    codepoint = 0,
+    startOfOctets = percentPosition,
+    state = 268,
+    byte: number,
+    dat: number;
+
+  while (percentPosition < end) {
+    byte = highHex(url.charCodeAt(percentPosition + 1)) | lowHex(url.charCodeAt(percentPosition + 2));
+    dat = data[byte];
+
+    state = data[state + dat];
+    if (state === 256) return null;
+
+    // eslint-disable-next-line
+    codepoint = codepoint << 6 | byte & mask[dat];
+
+    if (state === 268) {
+      decoded += url.substring(last, startOfOctets);
+      decoded += codepoint > 0xFFFF
+        ? String.fromCharCode(
+          0xD7C0 + (codepoint >> 10),
+          0xDC00 + (codepoint & 0x3FF)
+        )
+        : String.fromCharCode(codepoint);
+
+      last = percentPosition + 3;
+
+      percentPosition = url.indexOf('%', last);
+      if (percentPosition === -1)
+        return decoded + url.substring(last);
+
+      startOfOctets = percentPosition;
+      codepoint = 0;
+    } else {
+      percentPosition += 3;
+      if (percentPosition >= end || url.charCodeAt(percentPosition) !== 37) return null;
+    }
+  }
+
+  return decoded + url.substring(last);
+};
+
+/**
+ * Only decode a substring
+ */
+export const decodeSegment = (url: string, start: number, end: number): string | null => {
+  let percentPosition = url.indexOf('%', start);
+  if (percentPosition === -1) return url;
+  if (percentPosition + 3 > end) return null;
+
+  // eslint-disable-next-line
+  let decoded = '',
+    codepoint = 0,
+    startOfOctets = percentPosition,
+    state = 268,
+    byte: number,
+    dat: number;
+
+  while (percentPosition < end) {
+    byte = highHex(url.charCodeAt(percentPosition + 1)) | lowHex(url.charCodeAt(percentPosition + 2));
+    dat = data[byte];
+
+    state = data[state + dat];
+    if (state === 256) return null;
+
+    // eslint-disable-next-line
+    codepoint = codepoint << 6 | byte & mask[dat];
+
+    if (state === 268) {
+      decoded += url.substring(start, startOfOctets);
+      decoded += codepoint > 0xFFFF
+        ? String.fromCharCode(
+          0xD7C0 + (codepoint >> 10),
+          0xDC00 + (codepoint & 0x3FF)
+        )
+        : String.fromCharCode(codepoint);
+
+      start = percentPosition + 3;
+
+      percentPosition = url.indexOf('%', start);
+      if (percentPosition === -1)
+        return decoded + url.substring(start);
+
+      startOfOctets = percentPosition;
+      codepoint = 0;
+    } else {
+      percentPosition += 3;
+      if (percentPosition >= end || url.charCodeAt(percentPosition) !== 37) return null;
+    }
+  }
+
+  return decoded + url.substring(start);
+};

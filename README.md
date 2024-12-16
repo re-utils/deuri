@@ -1,40 +1,14 @@
-# Library template
+# `fast-duc`
+A fast alternative to native `decodeURIComponent`.
 
-An NPM library template using Bun.
+```ts
+import { decode, decodeSegment } from 'fast-duc';
 
-## Scripts
+// Decode the full string
+// Returns null if invalid
+decode(url);
 
-All script sources.
-
-### [Build](./scripts/build.ts)
-
-Emit `.js` and `.d.ts` files to [`lib`](./lib).
-
-### [Publish](./scripts/publish.ts)
-
-Move [`package.json`](./package.json), [`README.md`](./README.md) to [`lib`](./lib) and publish the package.
-
-### [Bench](./scripts/bench.ts)
-
-Run files that ends with `.bench.ts` extension.
-
-## Package scripts
-
-All specified scripts in [`package.json`](./package.json).
-
-```bash
-# Build and run tests
-bun build:test
-
-# Build and run benchmarks
-bun build:bench
-
-# Build and publish the package
-bun build:publish
-
-# Lint
-bun lint
-
-# Lint and fix if possible
-bun lint:fix
+// Decode a substring of the input string
+// Returns null if invalid
+decodeSegment(url, startIndex, endIndex);
 ```
