@@ -1,8 +1,8 @@
-# `fast-duc`
+# `deuri`
 A fast alternative to native `decodeURIComponent`.
 
 ```ts
-import { decode, decodeSegment } from 'fast-duc';
+import { decode, decodeSegment } from 'deuri';
 
 // Decode the full string
 // Returns null if invalid
