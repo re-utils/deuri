@@ -19,9 +19,11 @@ summary(() => {
   // eslint-disable-next-line
   const fastDecodeURIComponentSubstring = (str: string): string | null => fastDecodeURIComponent(str.substring(0, str.indexOf('?')));
   const nativeDecodeURIComponentSubstring = (str: string): string | null => decodeURIComponent(str.substring(0, str.indexOf('?')));
-  const deuriSubstring = (str: string): string | null => decodeSegment(str, 0, str.indexOf('?'));
+  const deuriBuiltinSubstring = (str: string): string | null => decodeSegment(str, 0, str.indexOf('?'));
+  const deuriCustomSubstring = (str: string): string | null => decode(str.substring(0, str.indexOf('?')));
 
-  bench('substring - deuri', () => substringData.map(deuriSubstring));
+  bench('substring - deuri', () => substringData.map(deuriBuiltinSubstring));
+  bench('substring - deuri custom', () => substringData.map(deuriCustomSubstring));
   bench('substring - fast-decode-uri-component', () => substringData.map(fastDecodeURIComponentSubstring));
   bench('substring - native', () => substringData.map(nativeDecodeURIComponentSubstring));
 });
