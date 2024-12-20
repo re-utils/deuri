@@ -13,7 +13,7 @@ const calcHex = (a: number, b: number): number =>
   a in hex && b in hex ? hex[a] << 4 | hex[b] : 255;
 
 // Map bytes to character to a transition
-const transitionType: number[] = [
+const type: number[] = [
   ...new Array(128).fill(0),
   ...new Array(16).fill(1),
   ...new Array(16).fill(2),
@@ -26,7 +26,7 @@ const transitionType: number[] = [
 ];
 
 // Maps a state to a new state when adding a transition
-const nextState = [
+const next = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   12, 0, 0, 0, 0, 24, 36, 48, 60, 72, 84, 96,
   0, 12, 12, 12, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -39,7 +39,7 @@ const nextState = [
 ];
 
 // Maps the current transition to a mask that needs to apply to the byte
-const transitionMask = transitionType.map((val) => [0x7F, 0x3F, 0x3F, 0x3F, 0x00, 0x1F, 0x0F, 0x0F, 0x0F, 0x07, 0x07, 0x07][val]);
+const mask = type.map((val) => [0x7F, 0x3F, 0x3F, 0x3F, 0x00, 0x1F, 0x0F, 0x0F, 0x0F, 0x07, 0x07, 0x07][val]);
 
 /**
  * Decode the full string
@@ -62,13 +62,13 @@ export const decode = (url: string): string | null => {
 
   for (; ;) {
     byte = calcHex(url.charCodeAt(percentPosition + 1), url.charCodeAt(percentPosition + 2));
-    state = nextState[state + transitionType[byte]];
+    state = next[state + type[byte]];
     if (state === 0) return null;
     if (state === 12) {
       decoded += url.substring(start, startOfOctets);
 
       // Calculate current codepoint
-      codepoint = codepoint << 6 | byte & transitionMask[byte];
+      codepoint = codepoint << 6 | byte & mask[byte];
 
       decoded += codepoint > 0xFFFF
         ? String.fromCharCode(
@@ -96,7 +96,7 @@ export const decode = (url: string): string | null => {
       if (percentPosition > end || url.charCodeAt(percentPosition) !== 37) return null;
 
       // Calculate current codepoint
-      codepoint = codepoint << 6 | byte & transitionMask[byte];
+      codepoint = codepoint << 6 | byte & mask[byte];
     }
   }
 };
@@ -121,13 +121,13 @@ export const decodeSegment = (url: string, start: number, end: number): string |
 
   for (; ;) {
     byte = calcHex(url.charCodeAt(percentPosition + 1), url.charCodeAt(percentPosition + 2));
-    state = nextState[state + transitionType[byte]];
+    state = next[state + type[byte]];
     if (state === 0) return null;
     if (state === 12) {
       decoded += url.substring(start, startOfOctets);
 
       // Calculate current codepoint
-      codepoint = codepoint << 6 | byte & transitionMask[byte];
+      codepoint = codepoint << 6 | byte & mask[byte];
 
       decoded += codepoint > 0xFFFF
         ? String.fromCharCode(
@@ -155,7 +155,7 @@ export const decodeSegment = (url: string, start: number, end: number): string |
       if (percentPosition > end || url.charCodeAt(percentPosition) !== 37) return null;
 
       // Calculate current codepoint
-      codepoint = codepoint << 6 | byte & transitionMask[byte];
+      codepoint = codepoint << 6 | byte & mask[byte];
     }
   }
 };
