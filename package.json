@@ -1,7 +1,7 @@
 {
   "name": "deuri",
-  "version": "0.0.4",
-  "description": "Fast decode URI component",
+  "version": "0.0.5",
+  "description": "Fast URI component utils",
   "keywords": [],
   "license": "MIT",
   "type": "module",

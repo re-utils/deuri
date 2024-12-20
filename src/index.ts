@@ -102,7 +102,12 @@ export const decode = (url: string): string | null => {
 };
 
 /**
- * Only decode a substring
+* Encode URI components
+*/
+export const encode = (str: string): string | null => str.isWellFormed() ? encodeURIComponent(str) : null;
+
+/**
+ * Decode a substring of an input string
  */
 export const decodeSegment = (url: string, start: number, end: number): string | null => {
   let percentPosition = url.indexOf('%');
