@@ -6,13 +6,9 @@ import fastDecodeURIComponent from 'fast-decode-uri-component';
 
 import valid from '../suites/valid.json';
 import invalid from '../suites/invalid.json';
+import mixed from '../suites/mixed.json';
 
 function load(dataset: any[], prefix: string, label: string, fn: (...args: any[]) => any): void {
-  dataset.forEach(fn);
-  dataset.forEach(fn);
-  dataset.forEach(fn);
-  dataset.forEach(fn);
-  dataset.forEach(fn);
   bench(`${prefix} - ${label}`, () => dataset.map(fn));
 }
 
@@ -63,6 +59,15 @@ summary(() => {
 // Invalid
 summary(() => {
   const evaluate = load.bind(null, invalid, 'invalid');
+
+  evaluate('deuri', decode);
+  evaluate('fast-decode-uri-component', fastDecodeURIComponent);
+  evaluate('native', nativeDecode);
+});
+
+// Mixed
+summary(() => {
+  const evaluate = load.bind(null, mixed, 'mixed');
 
   evaluate('deuri', decode);
   evaluate('fast-decode-uri-component', fastDecodeURIComponent);

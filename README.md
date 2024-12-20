@@ -1,5 +1,8 @@
 # `deuri`
-A fast alternative to native `decodeURIComponent`.
+Decode URI components.
+- Comparable speed to native in valid input cases.
+- 2-3x overall faster than `fast-decode-uri-component`.
+- Return `null` instead of throwing errors in invalid input cases.
 
 ```ts
 import { decode, decodeSegment } from 'deuri';
@@ -12,3 +15,5 @@ decode(url);
 // Returns null if invalid
 decodeSegment(url, startIndex, endIndex);
 ```
+
+This implementation is an optimized version of `fast-decode-uri-component`.

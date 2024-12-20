@@ -28,4 +28,4 @@ function createRandomString(): string {
     .join(''));
 }
 
-await Bun.write(`${import.meta.dir}/valid.json`, JSON.stringify(Array.from({ length: 10000 }, createRandomString)));
+await Bun.write(`${import.meta.dir}/valid.json`, JSON.stringify(Array.from({ length: 100 }, createRandomString)));

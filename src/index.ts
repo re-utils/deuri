@@ -1,16 +1,16 @@
 /* eslint-disable */
-const hexMap: number[] = [];
+const hex: number[] = [];
 for (let i = 48; i < 58; i++)
-  hexMap[i] = i - 48;
+  hex[i] = i - 48;
 
 // A - F (index 65 - 70)
 // a - f (index 97 - 102)
 for (let i = 0; i < 6; i++)
   // 10 to 15
-  hexMap[i + 65] = hexMap[i + 97] = i + 10;
+  hex[i + 65] = hex[i + 97] = i + 10;
 
-const calcHex = (first: number, second: number): number =>
-  typeof hexMap[first] === 'number' && typeof hexMap[second] === 'number' ? hexMap[first] << 4 | hexMap[second] : 255;
+const calcHex = (a: number, b: number): number =>
+  a in hex && b in hex ? hex[a] << 4 | hex[b] : 255;
 
 // Map bytes to character to a transition
 const transitionType: number[] = [
@@ -62,15 +62,15 @@ export const decode = (url: string): string | null => {
 
   for (; ;) {
     byte = calcHex(url.charCodeAt(percentPosition + 1), url.charCodeAt(percentPosition + 2));
+
     state = nextState[state + transitionType[byte]];
-    // UTF_REJECT
     if (state === 0) return null;
-
-    codepoint = codepoint << 6 | byte & transitionMask[byte];
-
-    // UTF_ACCEPT
     if (state === 12) {
       decoded += url.substring(start, startOfOctets);
+
+      // Calculate current codepoint
+      codepoint = codepoint << 6 | byte & transitionMask[byte];
+
       decoded += codepoint > 0xFFFF
         ? String.fromCharCode(
           0xD7C0 + (codepoint >> 10),
@@ -92,9 +92,12 @@ export const decode = (url: string): string | null => {
       startOfOctets = percentPosition;
       codepoint = 0;
     } else {
+      // Check next %
       percentPosition += 3;
-      // Search for next %
       if (percentPosition > end || url.charCodeAt(percentPosition) !== 37) return null;
+
+      // Calculate current codepoint
+      codepoint = codepoint << 6 | byte & transitionMask[byte];
     }
   }
 };
