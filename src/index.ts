@@ -62,7 +62,6 @@ export const decode = (url: string): string | null => {
 
   for (; ;) {
     byte = calcHex(url.charCodeAt(percentPosition + 1), url.charCodeAt(percentPosition + 2));
-
     state = nextState[state + transitionType[byte]];
     if (state === 0) return null;
     if (state === 12) {
@@ -113,23 +112,23 @@ export const decodeSegment = (url: string, start: number, end: number): string |
   end -= 3;
   if (percentPosition > end) return null;
 
-  for (let decoded = '',
+  let decoded = '',
     codepoint = 0,
     startOfOctets = percentPosition,
     // UTF_ACCEPT
     state = 12,
-    byte: number; ;
-  ) {
+    byte: number
+
+  for (; ;) {
     byte = calcHex(url.charCodeAt(percentPosition + 1), url.charCodeAt(percentPosition + 2));
     state = nextState[state + transitionType[byte]];
-    // UTF_REJECT
     if (state === 0) return null;
-
-    codepoint = codepoint << 6 | byte & transitionMask[byte];
-
-    // UTF_ACCEPT
     if (state === 12) {
       decoded += url.substring(start, startOfOctets);
+
+      // Calculate current codepoint
+      codepoint = codepoint << 6 | byte & transitionMask[byte];
+
       decoded += codepoint > 0xFFFF
         ? String.fromCharCode(
           0xD7C0 + (codepoint >> 10),
@@ -151,9 +150,12 @@ export const decodeSegment = (url: string, start: number, end: number): string |
       startOfOctets = percentPosition;
       codepoint = 0;
     } else {
+      // Check next %
       percentPosition += 3;
-      // Search for next %
       if (percentPosition > end || url.charCodeAt(percentPosition) !== 37) return null;
+
+      // Calculate current codepoint
+      codepoint = codepoint << 6 | byte & transitionMask[byte];
     }
   }
 };
