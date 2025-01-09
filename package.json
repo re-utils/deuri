@@ -3,6 +3,10 @@
   "version": "0.0.5",
   "description": "Fast URI component utils",
   "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/re-utils/deuri.git"
+  },
   "license": "MIT",
   "type": "module",
   "main": "./index.js",
