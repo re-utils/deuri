@@ -14,10 +14,10 @@ const calcHex = (a: number, b: number): number =>
 
 // Map bytes to character to a transition
 const type: number[] = [
-  ...new Array(128).fill(0),
-  ...new Array(16).fill(1),
-  ...new Array(16).fill(2),
-  ...new Array(32).fill(3),
+  ...Array.from<number>({ length: 128 }).fill(0),
+  ...Array.from<number>({ length: 16 }).fill(1),
+  ...Array.from<number>({ length: 16 }).fill(2),
+  ...Array.from<number>({ length: 32 }).fill(3),
 
   4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
   5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
@@ -49,7 +49,7 @@ export const decode = (url: string): string | null => {
   if (percentPosition === -1) return url;
 
   // Ensure percentPosition always has 2 chars after
-  let end = url.length - 3;
+  const end = url.length - 3;
   if (percentPosition > end) return null;
 
   let decoded = '',
@@ -61,28 +61,25 @@ export const decode = (url: string): string | null => {
     byte: number
 
   for (; ;) {
-    byte = calcHex(url.charCodeAt(percentPosition + 1), url.charCodeAt(percentPosition + 2));
+    byte = calcHex(url.codePointAt(percentPosition + 1)!, url.codePointAt(percentPosition + 2)!);
     state = next[state + type[byte]];
     if (state === 0) return null;
     if (state === 12) {
-      decoded += url.substring(start, startOfOctets);
+      decoded += url.slice(start, startOfOctets);
 
       // Calculate current codepoint
       codepoint = codepoint << 6 | byte & mask[byte];
 
       decoded += codepoint > 0xFFFF
-        ? String.fromCharCode(
-          0xD7C0 + (codepoint >> 10),
-          0xDC00 + (codepoint & 0x3FF)
-        )
-        : String.fromCharCode(codepoint);
+        ? String.fromCodePoint(0xD7C0 + (codepoint >> 10), 0xDC00 + (codepoint & 0x3FF))
+        : String.fromCodePoint(codepoint);
 
       // Search next encoded component
       start = percentPosition + 3;
 
       percentPosition = url.indexOf('%', start);
       if (percentPosition === -1)
-        return decoded + url.substring(start);
+        return decoded + url.slice(start);
 
       // Ensure percentPosition always has 2 chars after
       if (percentPosition > end)
@@ -93,7 +90,7 @@ export const decode = (url: string): string | null => {
     } else {
       // Check next %
       percentPosition += 3;
-      if (percentPosition > end || url.charCodeAt(percentPosition) !== 37) return null;
+      if (percentPosition > end || url.codePointAt(percentPosition) !== 37) return null;
 
       // Calculate current codepoint
       codepoint = codepoint << 6 | byte & mask[byte];
@@ -125,28 +122,25 @@ export const decodeSegment = (url: string, start: number, end: number): string |
     byte: number
 
   for (; ;) {
-    byte = calcHex(url.charCodeAt(percentPosition + 1), url.charCodeAt(percentPosition + 2));
+    byte = calcHex(url.codePointAt(percentPosition + 1)!, url.codePointAt(percentPosition + 2)!);
     state = next[state + type[byte]];
     if (state === 0) return null;
     if (state === 12) {
-      decoded += url.substring(start, startOfOctets);
+      decoded += url.slice(start, startOfOctets);
 
       // Calculate current codepoint
       codepoint = codepoint << 6 | byte & mask[byte];
 
       decoded += codepoint > 0xFFFF
-        ? String.fromCharCode(
-          0xD7C0 + (codepoint >> 10),
-          0xDC00 + (codepoint & 0x3FF)
-        )
-        : String.fromCharCode(codepoint);
+        ? String.fromCodePoint(0xD7C0 + (codepoint >> 10), 0xDC00 + (codepoint & 0x3FF))
+        : String.fromCodePoint(codepoint);
 
       // Search next encoded component
       start = percentPosition + 3;
 
       percentPosition = url.indexOf('%', start);
       if (percentPosition === -1)
-        return decoded + url.substring(start);
+        return decoded + url.slice(start);
 
       // Ensure percentPosition always has 2 chars after
       if (percentPosition > end)
@@ -157,7 +151,7 @@ export const decodeSegment = (url: string, start: number, end: number): string |
     } else {
       // Check next %
       percentPosition += 3;
-      if (percentPosition > end || url.charCodeAt(percentPosition) !== 37) return null;
+      if (percentPosition > end || url.codePointAt(percentPosition) !== 37) return null;
 
       // Calculate current codepoint
       codepoint = codepoint << 6 | byte & mask[byte];
