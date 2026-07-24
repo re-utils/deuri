@@ -23,7 +23,7 @@ const TRANSITION: number[] = [
 /**
  * `decodeURIComponent` without throwing errors.
  *
- * Replace invalid sequences with `0xFFFD`.
+ * Replace invalid sequences with `U+FFFD`.
  */
 export default (str: string): string => {
   var percentIdx = str.indexOf('%');
