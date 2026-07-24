@@ -14,5 +14,7 @@ Invalid sequences are replaced with `U+FFFD` character, which matches `node:quer
 
 For inputs with invalid sequences, `deuri` is 1.1x faster than `fast-decode-uri-component` and 70x faster than native `decodeURIComponent` (as it throws).
 
+Check the benchmarks in [bench](./bench).
+
 ## Credits
 The algorithm was tuned from `fast-decode-uri-component` to improve performance and support replacing invalid sequences.
