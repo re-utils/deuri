@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    // Strict lint rules
+    "allowUnusedLabels": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "exactOptionalPropertyTypes": true,
+    "strictBuiltinIteratorReturn": true,
+    "strictFunctionTypes": true,
+
+    // Isolated declarations
+    "isolatedDeclarations": true,
+    "isolatedModules": true
+  }
+}
