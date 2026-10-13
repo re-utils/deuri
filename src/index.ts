@@ -99,13 +99,11 @@ const TRANSITION: number[] = [
                 ? String.fromCharCode(codepoint)
                 : String.fromCharCode(0xd7c0 | (codepoint >> 10), 0xdc00 | (codepoint & 0x3ff)));
 
-            // skip %xx
             startIdx = percentIdx + 3;
             percentIdx = str.indexOf('%', startIdx);
           }
           // check next hex
           else {
-            // skip %xx
             percentIdx += 3;
 
             // missing next hex
