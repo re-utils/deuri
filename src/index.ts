@@ -55,6 +55,12 @@ export default (str: string): string => {
 
     // not meant to be an encoded character
     if (high === 255 || low === 255) {
+      if (state !== 12) {
+        // Flush pending octets without consuming the malformed escape.
+        decoded += str.slice(startIdx, startOfOctets) + '�';
+        state = 12;
+        startIdx = percentIdx;
+      }
       percentIdx = str.indexOf('%', percentIdx + 1);
     } else {
       const transition = TRANSITION[high | low];
@@ -98,18 +104,15 @@ export default (str: string): string => {
           // skip %xx
           percentIdx += 3;
 
-          // missing next hex
-          if (str.charCodeAt(percentIdx) !== 37) {
+          // missing or incomplete next hex
+          if (str.charCodeAt(percentIdx) !== 37 || percentIdx > maxPercentIdx) {
             // append and reset state
             decoded += str.slice(startIdx, startOfOctets) + '�';
             state = 12;
 
             startIdx = percentIdx;
             percentIdx = str.indexOf('%', startIdx + 1);
-          }
-          // not meant to be an encoded character
-          else if (percentIdx > maxPercentIdx) return decoded + str.slice(startIdx);
-          else continue;
+          } else continue;
         }
       }
     }
