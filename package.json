@@ -1,7 +1,7 @@
 {
   "name": "deuri",
-  "version": "3.0.0",
-  "description": "A fast percent decoding method",
+  "version": "3.0.1",
+  "description": "Faster percent decoding",
   "keywords": ["decode", "percent", "fast"],
   "license": "MIT",
   "repository": "re-utils/deuri",
