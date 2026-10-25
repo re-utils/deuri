@@ -1,4 +1,4 @@
-// Map bytes to character to a transition
+// map bytes to character to a transition
 const TRANSITION: number[] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -10,14 +10,14 @@ const TRANSITION: number[] = [
     6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 7, 7, 10, 9, 9, 9, 11, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
     4,
   ],
-  // Maps a state to a new state when adding a transition
+  // maps a state to a new state when adding a transition
   NEXT_STATE = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 24, 36, 48, 60, 72, 84, 96, 0, 12, 12, 12,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 24, 24, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 24, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 48, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 48, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ],
-  // Maps the current byte to a mask (byte & TRANSITION_MASK[TRANSITION[byte]])
+  // maps the current byte to a mask (byte & TRANSITION_MASK[TRANSITION[byte]])
   MASK = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
     26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
@@ -66,6 +66,13 @@ const TRANSITION: number[] = [
         (high = value(str.charCodeAt(percentIdx + 1))) === 255 ||
         (low = value(str.charCodeAt(percentIdx + 2))) === 255
       ) {
+        // flush pending octets without consuming the malformed escape
+        if (state !== 12) {
+          decoded += str.slice(startIdx, startOfOctets) + '�';
+          state = 12;
+          startIdx = percentIdx;
+        }
+
         // not meant to be an encoded character
         percentIdx = str.indexOf('%', percentIdx + 1);
       } else {
@@ -97,7 +104,7 @@ const TRANSITION: number[] = [
               str.slice(startIdx, startOfOctets) +
               (codepoint <= 0xffff
                 ? String.fromCharCode(codepoint)
-                : String.fromCharCode(0xd7c0 | (codepoint >> 10), 0xdc00 | (codepoint & 0x3ff)));
+                : String.fromCharCode(0xd7c0 + (codepoint >> 10), 0xdc00 | (codepoint & 0x3ff)));
 
             startIdx = percentIdx + 3;
             percentIdx = str.indexOf('%', startIdx);
@@ -107,7 +114,7 @@ const TRANSITION: number[] = [
             percentIdx += 3;
 
             // missing next hex
-            if (str.charCodeAt(percentIdx) !== 37) {
+            if (str.charCodeAt(percentIdx) !== 37 || percentIdx > maxPercentIdx) {
               // append and reset state
               decoded += str.slice(startIdx, startOfOctets) + '�';
               state = 12;
@@ -115,8 +122,6 @@ const TRANSITION: number[] = [
               startIdx = percentIdx;
               percentIdx = str.indexOf('%', startIdx + 1);
             }
-            // not meant to be an encoded character
-            else if (percentIdx > maxPercentIdx) return decoded + str.slice(startIdx);
             else continue;
           }
         }
