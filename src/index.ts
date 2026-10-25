@@ -73,7 +73,6 @@ const TRANSITION: number[] = [
           startIdx = percentIdx;
         }
 
-        // not meant to be an encoded character
         percentIdx = str.indexOf('%', percentIdx + 1);
       } else {
         high = (high << 4) | low;
@@ -121,8 +120,7 @@ const TRANSITION: number[] = [
 
               startIdx = percentIdx;
               percentIdx = str.indexOf('%', startIdx + 1);
-            }
-            else continue;
+            } else continue;
           }
         }
       }

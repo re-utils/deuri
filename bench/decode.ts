@@ -1,8 +1,8 @@
 import { bench, category } from 'measure-loop';
 import run from './run.ts';
 
-import valid from '../tests/suites/valid.json' with { type: 'json' };
-import invalid from '../tests/suites/invalid.json' with { type: 'json' };
+import valid from '../suites/valid.json' with { type: 'json' };
+import invalid from '../suites/invalid.json' with { type: 'json' };
 
 // @ts-ignore
 import fastDecodeURIComponent from 'fast-decode-uri-component';

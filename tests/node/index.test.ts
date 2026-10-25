@@ -4,17 +4,16 @@ import assert from 'node:assert';
 import deuri from 'deuri';
 import { unescape } from 'node:querystring';
 
-import valid from '../suites/valid.json' with { type: 'json' };
-import invalid from '../suites/invalid.json' with { type: 'json' };
+import valid from '../../suites/valid.json' with { type: 'json' };
+import invalid from '../../suites/invalid.json' with { type: 'json' };
 
 const bytes = (uri: string) => {
     const arr = new Array(uri.length);
     for (let i = 0; i < uri.length; i++) arr[i] = uri.charCodeAt(i);
     return arr;
   },
-  assertMatchNode = (uri: string) => {
+  assertMatchNode = (uri: string) =>
     assert.deepStrictEqual(bytes(deuri(uri)), bytes(unescape(uri)), uri);
-  };
 
 describe('valid', () => {
   it('suite', () => valid.forEach(assertMatchNode));
@@ -25,7 +24,9 @@ describe('invalid', () => {
 
   describe('incomplete sequences', () => {
     it('escaped byte and pair of bytes', () => {
-      const hex = new Array(256).fill(0).map((_, byte) => `%${byte.toString(16).padStart(2, '0')}`);
+      const hex = new Array(256);
+      for (let i = 0; i < 256; i++)
+        hex[i] = '%' + i.toString(16).padStart(2, '0');
 
       for (const first of hex) {
         assertMatchNode(first);
